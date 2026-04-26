@@ -9,9 +9,6 @@ import { useKeystrokeDynamics, KeystrokeMetrics } from './hooks/useKeystrokeDyna
 import { Activity, Brain, Timer, ShieldCheck, AlertTriangle, RefreshCw, Zap, Binary } from 'lucide-react';
 import { ResponsiveContainer, LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, AreaChart, Area } from 'recharts';
 import { cn } from './lib/utils';
-import { GoogleGenAI, Type } from "@google/genai";
-
-const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
 
 type TestState = 'idle' | 'baseline' | 'current' | 'analyzing' | 'finished';
 
@@ -91,27 +88,20 @@ export default function App() {
         3. Jitter increase >20% = Rhythmic Decomposition.
       `;
 
-      const response = await ai.models.generateContent({
-        model: "gemini-3-flash-preview",
-        contents: prompt,
-        config: {
-          systemInstruction: "You are a professional neuro-ergonomics analyst. Analyze the data and provide a JSON report.",
-          responseMimeType: "application/json",
-          responseSchema: {
-            type: Type.OBJECT,
-            properties: {
-              fatigueScore: { type: Type.NUMBER, description: "Fatigue score from 0 to 100" },
-              primaryIndicator: { type: Type.STRING },
-              scientificSummary: { type: Type.STRING },
-              recommendation: { type: Type.STRING }
-            },
-            required: ["fatigueScore", "primaryIndicator", "scientificSummary", "recommendation"]
-          }
-        }
+      const response = await fetch('/api/analyze', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ prompt }),
       });
 
-      const result = JSON.parse(response.text.trim()) as AnalysisResult & { strategy?: string };
-      result.strategy = "Gemini AI Neural Core";
+      if (!response.ok) {
+        throw new Error('Analysis request failed');
+      }
+
+      const result = await response.json() as AnalysisResult;
+      result.strategy = "Groq Llama-3 (Cloud Relay)";
       
       setAnalysis(result);
       
