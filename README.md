@@ -1,59 +1,44 @@
 # Kinetic Scan: Neuro-Kinetic Fatigue Monitor
 
-## 🧠 Overview
-Kinetic Scan is a professional neuro-ergonomic assessment tool designed to detect **Acute Cognitive Fatigue** through digital biomarkers. By analyzing high-resolution typing telemetry (Keystroke Dynamics), the system identifies subtle timing patterns—"Rhythmic Decomposition"—that indicate mental exhaustion before it impacts critical performance.
+## 🧠 Introduction
+Kinetic Scan is a sophisticated neuro-ergonomic assessment platform designed to identify **Acute Cognitive Fatigue** through high-resolution biometric telemetry. By utilizing **Keystroke Dynamics**, the system detects subtle "Rhythmic Decomposition"—micro-variations in typing intervals that precede measurable performance decline. This tool serves as a non-invasive diagnostic layer for high-stakes environments where cognitive readiness is paramount.
 
-## 🚀 Key Features
-- **Real-time Telemetry**: High-precision capture of Flight Time (FT) and Dwell Time (DT).
-- **Neural Analysis**: Powered by Google Gemini AI for advanced pattern recognition.
-- **Baseline Comparison**: Scientific evaluation against personalized "Rested" profiles.
-- **Visual Analytics**: Interactive data visualization of motor-kinetic trends.
+## 🛠️ System Design
+Below is the architectural flow of the Kinetic Scan platform, illustrating the process from raw telemetry acquisition to neural inference and visualization.
 
-## 🛠️ System Architecture
-The project follows a low-latency architecture designed for millisecond-precision data processing:
+```mermaid
+graph TD
+    A[User Input Events] -->|keydown/keyup| B[Biometric Capture Engine]
+    B -->|performance.now| C[Telemetry Normalization]
+    C -->|Kinetic Vectors| D[Express Secure Proxy]
+    D -->|Authorization & Payload| E[Groq AI Neural Core]
+    E -->|JSON Fatigue Report| D
+    D -->|Analysis Data| F[React Analytics Dashboard]
+    F -->|Visual Trends| G[Recharts Visualization]
+    F -->|Persistence| H[LocalStorage History]
+```
 
-1.  **Kinetic Capture (Frontend)**: A React-based engine using `performance.now()` to capture key events with <1ms accuracy.
-2.  **Telemetry Processor**: A custom processing layer that normalizes raw timing into:
-    - **Flight Time (FT)**: Latency between keys (Processing speed).
-    - **Dwell Time (DT)**: Duration a key is held (Motor persistence).
-    - **FT Jitter**: Standard deviation of flight times (Rhythmic consistency).
-3.  **Neural Inference (Gemini AI)**: Utilizing `gemini-1.5-flash` for multi-vector kinetic analysis and fatigue scoring.
-4.  **Analytics Layer**: Real-time visualization using Recharts to display comparative metrics.
+## 📦 Technology Stack
 
-## 💡 AI Integration
-The core intelligence is powered by the **Google Gemini API**. Unlike simple threshold logic, the AI performs a "Neuro-Kinetic Assessment" by comparing live typing rhythms against a unique user baseline. It identifies "Rhythmic Decomposition"—the loss of typing rhythm that occurs during early-stage mental exhaustion.
+### Frontend (Client-Side)
+- **Engine**: React 19 (Functional Components & Hooks)
+- **Styling**: Tailwind CSS 4 (Utility-first architecture)
+- **Animations**: Motion (Layout transitions and rhythmic feedback)
+- **Data Visualization**: Recharts (Longitudinal trend analysis)
+- **Icons**: Lucide React
 
-## 📦 Tech Stack
-- **Languages**: TypeScript, Node.js
-- **Frameworks**: React 19, Tailwind CSS 4, Motion
-- **APIs**: Groq SDK (Llama 3-8b-8192) via Secure Express Proxy
-- **Visualization**: Recharts, Lucide React
-- **Runtime**: Vite + Express (Full-Stack)
+### Backend (Server-Side)
+- **Runtime**: Node.js with Express
+- **Language**: TypeScript
+- **Security**: Server-side credential isolation (Secure Proxy Pattern)
+- **AI Core**: Groq SDK (Llama 3-8b-8192) for near-instantaneous neural inference
 
-## 🚀 Deployment Guide (GitHub + Vercel)
-
-Follow these steps to deploy your own version:
-
-### 1. GitHub Setup
-1. Create a new repository on GitHub.
-2. Push this project:
-   ```bash
-   git init
-   git add .
-   git commit -m "Initial commit"
-   git remote add origin YOUR_REPO_URL
-   git push -u origin main
-   ```
-
-### 2. Vercel Deployment
-1. Go to [Vercel](https://vercel.com) and import your GitHub repository.
-2. **Environment Variables**: In the Vercel project settings, add the following:
-   - `GROQ_API_KEY`: Your key from [Groq Cloud](https://console.groq.com/keys).
-   - `NODE_ENV`: `production`
-3. **Build Settings**: Vercel will automatically detect the Vite build.
-4. Click **Deploy**.
-
-## 🤝 Project Info
-- **Developer**: Asma Khalid
+## 🤝 Project Details
+- **Project Name**: Kinetic Scan
+- **Institution/Team**: ANB Squad
+- **Lead Developer**: Asma Khalid
 - **Status**: Production-Ready / Neuro-Ergonomic Assessment Tool
-- **Security**: All API keys are protected on the server side using an Express proxy.
+- **Security Compliance**: Zero-trust API architecture; sensitive keys are never exposed to the client-side.
+
+---
+*Developed by ANB Squad - Advancing Neuro-Biometric Assessment.*

@@ -10,9 +10,18 @@ dotenv.config();
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-const groq = new Groq({
-  apiKey: process.env.GROQ_API_KEY,
-});
+let groqClient: Groq | null = null;
+
+function getGroqClient() {
+  if (!groqClient) {
+    const apiKey = process.env.GROQ_API_KEY;
+    if (!apiKey) {
+      throw new Error("GROQ_API_KEY environment variable is required but missing.");
+    }
+    groqClient = new Groq({ apiKey });
+  }
+  return groqClient;
+}
 
 async function startServer() {
   const app = express();
@@ -29,10 +38,7 @@ async function startServer() {
   app.post("/api/analyze", async (req, res) => {
     try {
       const { prompt } = req.body;
-
-      if (!process.env.GROQ_API_KEY) {
-        return res.status(500).json({ error: "GROQ_API_KEY not configured on server" });
-      }
+      const groq = getGroqClient();
 
       const chatCompletion = await groq.chat.completions.create({
         messages: [
